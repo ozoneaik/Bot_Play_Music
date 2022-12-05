@@ -7,12 +7,7 @@ module.exports = {
     utilisation: '{prefix}help',
 
     execute(client, message, args) {
-
-        let title = client.user.username;
-        let thumbnail = client.user.displayAvatarURL();
-        const commands = client.commands.filter(x => x.showHelp !== false);
-        let description = `**คำสั่งที่ใช้ได้**\n` + commands.map(x => `\`${x.name}${x.aliases[0] ? ` (${x.aliases.map(y => y).join(', ')})\`` : '\`'}`).join(' | ');
-
-        return message.channel.send({ embeds: [embed.Embed_help(title, thumbnail, description)] });
+        let description = '**\nคำสั่งที่ใช้ได้**\n\t+back\n\t+help\n\t+pause\n\t+play\n\t+queue\n\t+skip';
+        return message.channel.send(description);
     },
 };

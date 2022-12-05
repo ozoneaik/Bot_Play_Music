@@ -7,11 +7,12 @@ module.exports = {
     execute(client, message) {
         const queue = client.player.getQueue(message.guild.id);
 
-        if (!queue || !queue.playing)
-            return message.channel.send(`${message.author}, There is no music currently playing!. ❌`);
+        if (!queue || !queue.playing){
+            return message.channel.send('❌ | ไม่มีเพลงที่เล่นอยู่ตอนนี้ครับ');
+        }
 
         const success = queue.setPaused(true);
 
-        return success ? message.react('⏸️') : message.channel.send(`❌ | Something went wrong.`);
+        return success ? message.react('⏸️') : message.channel.send('❌ | มีบางอย่างผิดพลาด');
     },
 };

@@ -16,15 +16,7 @@ module.exports = async (client) => {
         bot_version: `v${package.version}`,
         cpu: `${os.cpus()[0].model}`
     };
-
-
-    console.log(`+-----------------------+`);
-    console.log(`| ${client.config.name}: ${color.cyan}${client.status.bot_version}${color.white} \t|`);
-    console.log(`| Node.js: ${color.cyan}${client.status.node_version}${color.white} \t|`);
-    console.log(`| Discord.js: ${color.cyan}${client.status.discord_version}${color.white} \t|`);
-    console.log(`+-----------------------+`);
-
-
+    
     client.user.setActivity(client.config.playing);
     console.log(`>>> Logged in as ${client.user.username}`);
 };

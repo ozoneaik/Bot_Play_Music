@@ -10,12 +10,16 @@ module.exports = {
         const queue = client.player.getQueue(message.guild.id);
 
  
-        if (!queue || !queue.playing) return message.channel.send(`❌ | ไม่มีเพลงในคิวในขณะนี้ครับ`);
+        if (!queue || !queue.playing){
+          return message.channel.send('❌ | ไม่มีเพลงในคิวในขณะนี้ครับ');
+        }
 
-        if (!queue.tracks[0]) return message.channel.send(`❌ | ไม่มีเพลงในคิวหลังจากปัจจุบัน`);
+        if (!queue.tracks[0]){
+          return message.channel.send('❌ | ไม่มีเพลงในคิวหลังจากปัจจุบัน');
+        }  
 
 
-        let nowplay = `Now Playing : ${queue.current.title}\n\n`;
+        let nowplay = `\nเพลงที่เล่นขณะนี้ : ${queue.current.title}\n\n`;
         let queueMsg = '';
         if (queue.tracks.length > 9) {
           for (var i = 0; i <= 9; i++) {
@@ -30,6 +34,7 @@ module.exports = {
         }
 
         let loopStatus = queue.repeatMode ? (queue.repeatMode === 2 ? 'All' : 'One') : 'Off';
-        return message.channel.send({ embeds: [embed.Embed_queue("รายการคิว", nowplay, queueMsg, loopStatus)] });
+        
+        return message.channel.send("รายการคิว" + nowplay + queueMsg + loopStatus);
     },
 };

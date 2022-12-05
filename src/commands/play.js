@@ -8,16 +8,18 @@ module.exports = {
     voiceChannel: true,
 
     async execute(client, message, args) {
-        if (!args[0])
-            return message.channel.send(`❌ | เขียนชื่อเพลงที่คุณต้องการค้นหา`);
+        if (!args[0]){
+            return message.channel.send('พิมพ์ชื่อเพลงที่คุณต้องการค้นหา\nตัวอย่าง\n /play ไม่บอกเธอ');
+        }
 
         const res = await client.player.search(args.join(' '), {
             requestedBy: message.member,
             searchEngine: QueryType.AUTO
         });
 
-        if (!res || !res.tracks.length)
-            return message.channel.send(`❌ | ไม่พบผลลัพธ์.`);
+        if (!res || !res.tracks.length){
+            return message.channel.send('❌ | ไม่พบผลลัพธ์');
+        }
 
         const queue = await client.player.createQueue(message.guild, {
             metadata: message.channel,
@@ -29,11 +31,12 @@ module.exports = {
         });
 
         try {
-            if (!queue.connection)
+            if (!queue.connection){
                 await queue.connect(message.member.voice.channel);
+            }
         } catch {
             await client.player.deleteQueue(message.guild.id);
-            return message.channel.send(`❌ | Bot ไม่สามารถเข้าร่วมห้องได้`);
+            return message.channel.send('❌ | Bot ไม่สามารถเข้าร่วมห้องได้');
         }
 
         await message.react('👍');

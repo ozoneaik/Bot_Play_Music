@@ -9,9 +9,6 @@ require('dotenv').config();
 const config = require('./config.json');
 const embed = require('./src/embeds/embeds');
 
-
-
-
 let client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -24,9 +21,7 @@ let client = new Client({
     disableMentions: 'everyone',
 });
 
-
 client.config = config;
-
 client.config.prefix = process.env.PREFIX || config.prefix;
 client.config.playing = process.env.PLAYING || config.playing;
 client.config.defaultVolume = Number(process.env.DEFAULTVOLUME || config.defaultVolume);
@@ -41,101 +36,76 @@ client.config.ytdlOptions = {
     highWaterMark: 1 << 27 // about 134 mins
 }
 
-
 client.commands = new Collection();
 client.player = new Player(client, {
     ytdlOptions: client.config.ytdlOptions
 });
+
 const player = client.player;
-
-
-
-
 const loadEvents = () => {
     return new Promise((resolve, reject) => {
         const events = fs.readdirSync('./src/events/').filter(file => file.endsWith('.js'));
         for (const file of events) {
             try {
                 const event = require(`./src/events/${file}`);
-                console.log(`-> Loaded event ${file.split('.')[0]}`);
-
                 client.on(file.split('.')[0], event.bind(null, client));
                 delete require.cache[require.resolve(`./src/events/${file}`)];
             } catch (error) {
                 reject(error);
             }
         };
-
         resolve();
-    })
+    });
 }
 
-
 const loadFramework = () => {
-    console.log(`-> loading web framework ......`);
     return new Promise((resolve, reject) => {
         const app = express();
         const port = client.config.port || 33333;
-
         app.listen(port, function () {
             console.log(`Server start listening port on ${port}`);
-        })
-
+        });
         app.get('/', function (req, res) {
             res.send('200 ok.')
-        })
-
+        });
         resolve();
-    })
+    });
 }
 
-
 const loadCommands = () => {
-    console.log(`-> loading commands ......`);
     return new Promise((resolve, reject) => {
         fs.readdir('./src/commands/', (err, files) => {
-            console.log(`+-------------------------------+`);
-            if (err)
+            if (err){
                 return console.log('Could not find any commands!');
-
+            }
             const jsFiles = files.filter(file => file.endsWith('.js'));
-
-            if (jsFiles.length <= 0)
+            if (jsFiles.length <= 0){
                 return console.log('Could not find any commands!');
-
+            }
             for (const file of jsFiles) {
                 try {
                     const command = require(`./src/commands/${file}`);
-
-                    console.log(`| Loaded Command ${command.name.toLowerCase()}   \t|`);
-
                     client.commands.set(command.name.toLowerCase(), command);
                     delete require.cache[require.resolve(`./src/commands/${file}`)];
                 } catch (error) {
                     reject(error);
                 }
             };
-            console.log(`+-------------------------------+`);
-            console.log('-- loading Commands finished --');
-
             resolve();
         });
-    })
+    });
 }
 
 
 Promise.all([loadEvents(), loadFramework(), loadCommands()])
     .then(function () {
-        console.log('\x1B[32m*** All loaded successfully ***\x1B[0m');
+        console.log('*** All loaded successfully ***');
         client.login(process.env.TOKEN);
     });
 
-
-
-
-const settings = (queue, song) =>
+const settings = (queue, song) => {
     `**Volume**: \`${queue.volume}%\` | **Loop**: \`${queue.repeatMode ? (queue.repeatMode === 2 ? 'All' : 'ONE') : 'Off'}\``;
-
+}
 
 player.on('error', (queue, error) => {
     console.log(`There was a problem with the song queue => ${error.message}`);
@@ -146,17 +116,24 @@ player.on('connectionError', (queue, error) => {
 });
 
 player.on('trackStart', (queue, track) => {
-    if (queue.repeatMode !== 0)
+    if (queue.repeatMode !== 0){
         return;
-    queue.metadata.send({ embeds: [embed.Embed_play("Playing", track.title, track.url, track.duration, track.thumbnail, settings(queue))] });
+    }
+    queue.metadata.send({
+        embeds: [embed.Embed_play("Playing", track.title, track.url, track.duration, track.thumbnail, settings(queue))] 
+    });
 });
 
 player.on('trackAdd', (queue, track) => {
-    if (queue.previousTracks.length > 0)
-        queue.metadata.send({ embeds: [embed.Embed_play("Added", track.title, track.url, track.duration, track.thumbnail, settings(queue))] });
+    if (queue.previousTracks.length > 0){
+        queue.metadata.send({
+            embeds: [embed.Embed_play("Added", track.title, track.url, track.duration, track.thumbnail, settings(queue))] 
+        });
+    }
 });
 
 player.on('channelEmpty', (queue) => {
-    if (!client.config.autoLeave)
+    if (!client.config.autoLeave){
         queue.stop();
+    }
 });

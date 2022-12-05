@@ -11,7 +11,7 @@ module.exports = {
             .setTitle(music_title)
             .setURL(music_url)
             .setThumbnail(music_thumbnail)
-            .addFields({ name: status, value: `**Duration**: \`${music_length}\` | ${settings}`, inline: true })
+            .addFields({ name: status, value: `**ความยาวเพลง**: \`${music_length}\` | ${settings}`, inline: true })
             .setTimestamp()
         return Embed_play;
     },
