@@ -8,7 +8,7 @@ module.exports = {
     voiceChannel: true,
 
     async execute(client, message, args) {
-        if (!args[0]){
+        if (!args[0]) {
             return message.channel.send('พิมพ์ชื่อเพลงที่คุณต้องการค้นหา\nตัวอย่าง\n /play ไม่บอกเธอ');
         }
 
@@ -17,7 +17,7 @@ module.exports = {
             searchEngine: QueryType.AUTO
         });
 
-        if (!res || !res.tracks.length){
+        if (!res || !res.tracks.length) {
             return message.channel.send('❌ | ไม่พบผลลัพธ์');
         }
 
@@ -31,7 +31,7 @@ module.exports = {
         });
 
         try {
-            if (!queue.connection){
+            if (!queue.connection) {
                 await queue.connect(message.member.voice.channel);
             }
         } catch {

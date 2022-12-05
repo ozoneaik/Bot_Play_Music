@@ -7,7 +7,7 @@ module.exports = {
     async execute(client, message) {
         const queue = client.player.getQueue(message.guild.id);
 
-        if (!queue || !queue.playing){
+        if (!queue || !queue.playing) {
             return message.channel.send('❌ | ไม่มีเพลงที่เล่นในขณะนี้');
         }
 
@@ -18,7 +18,7 @@ module.exports = {
             await wait(500);
             queue.setRepeatMode(1);
         }
-        else{
+        else {
             queue.skip();
         }
 
