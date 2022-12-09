@@ -1,11 +1,11 @@
 {
-    "name": "Music Disc",
+    "name": "Play Music Bot Discord",
     "prefix": "+",
-    "playing": "+help | music",
+    "playing": "ใช้คำสั่ง +help เพื่อตรวจสอบว่าบอททำงาน",
     "color": "#FFFFFF",
     "defaultVolume": 50,
     "maxVolume": 100,
     "autoLeave": true,
     "displayVoiceState": true,
-    "port": 33333
+    "port": 40000
 }
